@@ -45,7 +45,7 @@ pub fn query(
   msg: QueryMsg,
 ) -> StdResult<Binary> {
   let result = match msg {
-    QueryMsg::GetSomething {} => to_binary(&query::get_something(deps)?),
+    QueryMsg::GetBallot {} => to_binary(&query::get_ballot(deps)?),
   }?;
   Ok(result)
 }

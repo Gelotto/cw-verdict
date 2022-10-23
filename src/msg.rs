@@ -1,7 +1,4 @@
-use crate::{
-  models::{Style, Token, Verdict},
-  state::Something,
-};
+use crate::models::{Ballot, Style, Token, Verdict};
 use cosmwasm_std::{Addr, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -38,10 +35,10 @@ pub enum ExecuteMsg {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum QueryMsg {
-  GetSomething {},
+  GetBallot {},
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct GetSomethingResponse {
-  pub something: Something,
+pub struct GetBallotResponse {
+  pub ballot: Ballot,
 }

@@ -3,15 +3,7 @@ use crate::models::{Ballot, Choice, Juror, Status, Vote};
 use crate::msg::InstantiateMsg;
 use cosmwasm_std::{Addr, DepsMut, Env, MessageInfo, Uint128};
 use cw_storage_plus::{Item, Map};
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct Something {
-  pub value: Option<String>,
-}
-
-pub const SOMETHING: Item<Something> = Item::new("something");
 pub const BALLOT: Item<Ballot> = Item::new("ballot");
 pub const VOTES: Map<(u32, Addr), Vote> = Map::new("votes");
 pub const JURORS: Map<Addr, Juror> = Map::new("decisions");

@@ -1,8 +1,7 @@
-use crate::msg::GetSomethingResponse;
-use crate::state::{SOMETHING, Something};
+use crate::{msg::GetBallotResponse, state::BALLOT};
 use cosmwasm_std::{Deps, StdResult};
 
-pub fn get_something(deps: Deps) -> StdResult<GetSomethingResponse> {
-  let something: Something = SOMETHING.load(deps.storage)?;
-  Ok(GetSomethingResponse{ something })
+pub fn get_ballot(deps: Deps) -> StdResult<GetBallotResponse> {
+  let ballot = BALLOT.load(deps.storage)?;
+  Ok(GetBallotResponse { ballot })
 }
