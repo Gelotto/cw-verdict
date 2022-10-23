@@ -1,3 +1,9 @@
-mod do_something;
+mod cancel;
+mod claim;
+mod decide;
+mod vote;
 
-pub use do_something::do_something;
+pub use cancel::cancel;
+pub use claim::claim;
+pub use decide::decide;
+pub use vote::vote;
