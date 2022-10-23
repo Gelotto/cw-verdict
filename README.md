@@ -2,10 +2,10 @@
 
 A CosmWasm smart contract that implements a game of voting. Players can purchase
 votes on one or more possible outcomes of an event, as described by the prompt
-of a ballot. Each ballot is presented in the form of a multiple-choice question.
+of a trial. Each trial is presented in the form of a multiple-choice question.
 Upon a specified date and time, one or more trusted parties run a script
 off-chain, which consults an outside authority, like a weather or sporting event
-API, and returns an integer code that maps to one of the ballot's choices. Both
+API, and returns an integer code that maps to one of the trial's choices. Both
 the output of the script and its execution logs are sent back and stored in the
 contract. The source code for the script is stored transparently on-chain.
 
@@ -18,7 +18,7 @@ contract. The source code for the script is stored transparently on-chain.
 - weight: number (u32)
 - choice: number (u32)
 
-Wallets can cast votes as long as a ballot is "active". Each vote carries a
+Wallets can cast votes as long as a trial is "active". Each vote carries a
 "weight". The cost of casting a vote is equal to the weight of the vote
 multiplied by a unit price, defined by `Ballot.price`. A wallet can cast votes
 multiple times, either on the same choice or different. For example, they can
@@ -32,7 +32,7 @@ place a weight of 5 on choice "A" and a weight of 1 on choice "B".
 - choice: winning choice index output by script
 
 Only members of the "jury" can execute the `decide` method, in which they upload
-the result of running the ballot's decision script. The last "juror" to execute
+the result of running the trial's decision script. The last "juror" to execute
 this method puts the contract into the `decided` state in which, after a defined
 period of time, winners can claim their prize. If any member of the jury submits
 a winning choice that differs from the winning choices uploaded by other members

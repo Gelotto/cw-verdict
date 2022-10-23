@@ -6,10 +6,10 @@ use serde::{Deserialize, Serialize};
 #[serde(rename_all = "snake_case")]
 pub enum Status {
   Active,
-  Deciding,
-  Decided,
-  Hung,
-  Canceled,
+  Deliberating,
+  HasVerdict,
+  HungJury,
+  Dismissed,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -59,7 +59,7 @@ pub struct Verdict {
   pub script: String,
   pub language: ProgrammingLanguage,
   pub start: Timestamp,
-  pub duration: u32,
+  pub minutes: u32,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -75,10 +75,11 @@ pub struct Juror {
   pub url: Option<String>,
   pub choice: Option<u32>,
   pub logs: Option<String>,
+  pub pct: u8,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct Ballot {
+pub struct Trial {
   pub owner: Addr,
   pub prompt: String,
   pub choices: Vec<Choice>,
@@ -91,28 +92,28 @@ pub struct Ballot {
   pub winner: Option<u32>,
 }
 
-impl Ballot {
+impl Trial {
   pub fn is_active(&self) -> bool {
     self.status == Status::Active
   }
 
-  pub fn is_deciding(&self) -> bool {
-    self.status == Status::Deciding
+  pub fn is_in_deliberations(&self) -> bool {
+    self.status == Status::Deliberating
   }
 
-  pub fn is_decided(&self) -> bool {
-    self.status == Status::Decided
+  pub fn has_verdict(&self) -> bool {
+    self.status == Status::HasVerdict
   }
 
-  pub fn is_canceled(&self) -> bool {
-    self.status == Status::Canceled
+  pub fn has_been_canceled(&self) -> bool {
+    self.status == Status::Dismissed
   }
 
-  pub fn is_hung(&self) -> bool {
-    self.status == Status::Hung
+  pub fn has_hung_jury(&self) -> bool {
+    self.status == Status::HungJury
   }
 
   pub fn can_be_canceled(&self) -> bool {
-    self.status == Status::Active || self.status == Status::Deciding
+    self.status == Status::Active || self.status == Status::Deliberating
   }
 }

@@ -1,14 +1,14 @@
 use crate::error::ContractError;
-use crate::models::{Ballot, Choice, Juror, Status, Vote};
+use crate::models::{Choice, Juror, Status, Trial, Vote};
 use crate::msg::InstantiateMsg;
 use cosmwasm_std::{Addr, DepsMut, Env, MessageInfo, Uint128};
 use cw_storage_plus::{Item, Map};
 
-pub const BALLOT: Item<Ballot> = Item::new("ballot");
+pub const TRIAL: Item<Trial> = Item::new("trial");
 pub const VOTES: Map<(u32, Addr), Vote> = Map::new("votes");
 pub const JURORS: Map<Addr, Juror> = Map::new("decisions");
-pub const CLAIM_AMOUNT: Item<Uint128> = Item::new("claim_amount");
 pub const HAS_CLAIMED: Map<Addr, bool> = Map::new("has_claimed");
+pub const VOTERS_TOTAL_CLAIM_AMOUNT: Item<Uint128> = Item::new("voters_total_claim_amount");
 
 /// Initialize contract state data.
 pub fn initialize(
@@ -17,8 +17,8 @@ pub fn initialize(
   info: &MessageInfo,
   msg: &InstantiateMsg,
 ) -> Result<(), ContractError> {
-  // initialize ballot
-  let ballot = Ballot {
+  // initialize trial
+  let trial = Trial {
     status: Status::Active,
     owner: info.sender.clone(),
     prompt: msg.prompt.clone(),
@@ -39,22 +39,26 @@ pub fn initialize(
       .collect(),
   };
 
-  BALLOT.save(deps.storage, &ballot)?;
-
   // initialize decision records
   for params in msg.jury.iter() {
     JURORS.save(
       deps.storage,
       params.address.clone(),
+      // TODO: validate juror
       &Juror {
         address: params.address.clone(),
         name: params.name.clone(),
         url: params.url.clone(),
+        pct: params.pct,
         choice: None,
         logs: None,
       },
     )?;
   }
+
+  // TODO: validate trial
+  TRIAL.save(deps.storage, &trial)?;
+  VOTERS_TOTAL_CLAIM_AMOUNT.save(deps.storage, &Uint128::zero())?;
 
   Ok(())
 }

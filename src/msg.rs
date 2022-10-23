@@ -1,4 +1,4 @@
-use crate::models::{Ballot, Style, Token, Verdict};
+use crate::models::{Style, Token, Trial, Verdict};
 use cosmwasm_std::{Addr, Uint128};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -8,6 +8,7 @@ pub struct JurorIntiatiationParams {
   pub address: Addr,
   pub name: String,
   pub url: Option<String>,
+  pub pct: u8,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -39,6 +40,6 @@ pub enum QueryMsg {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct GetBallotResponse {
-  pub ballot: Ballot,
+pub struct GetTrialResponse {
+  pub trial: Trial,
 }
