@@ -34,7 +34,7 @@ pub fn execute(
     ExecuteMsg::Vote { choice, weight } => execute::vote(deps, env, info, choice as usize, weight),
     ExecuteMsg::Decide { choice, logs } => execute::decide(deps, env, info, choice as usize, &logs),
     ExecuteMsg::Claim {} => execute::claim(deps, env, info),
-    ExecuteMsg::Cancel {} => execute::cancel(deps, env, info),
+    ExecuteMsg::Cancel { reason } => execute::cancel(deps, env, info, &reason),
   }
 }
 

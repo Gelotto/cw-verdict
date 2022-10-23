@@ -9,6 +9,7 @@ pub const VOTES: Map<(u32, Addr), Vote> = Map::new("votes");
 pub const JURORS: Map<Addr, Juror> = Map::new("decisions");
 pub const HAS_CLAIMED: Map<Addr, bool> = Map::new("has_claimed");
 pub const VOTERS_TOTAL_CLAIM_AMOUNT: Item<Uint128> = Item::new("voters_total_claim_amount");
+pub const CANCEL_REASON: Item<String> = Item::new("cancel_reason");
 
 /// Initialize contract state data.
 pub fn initialize(

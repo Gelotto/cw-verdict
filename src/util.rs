@@ -18,13 +18,7 @@ pub fn respond_cw20(
   action: &str,
 ) -> Result<Response, ContractError> {
   validate_cw20_funds(&deps, &info.sender, amount, &cw20_token_address)?;
-  let submsg = build_cw20_transfer_msg(
-    deps,
-    &info.sender,
-    contract_addr,
-    cw20_token_address,
-    amount,
-  )?;
+  let submsg = build_cw20_transfer_msg(&info.sender, contract_addr, cw20_token_address, amount)?;
   Ok(
     Response::new()
       .add_submessage(submsg)
@@ -33,7 +27,6 @@ pub fn respond_cw20(
 }
 
 pub fn build_cw20_transfer_msg(
-  deps: &DepsMut,
   from_address: &Addr,
   to_address: &Addr,
   cw20_token_address: &Addr,

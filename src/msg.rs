@@ -28,7 +28,7 @@ pub struct InstantiateMsg {
 pub enum ExecuteMsg {
   Vote { choice: u32, weight: u32 },
   Decide { choice: u32, logs: String },
-  Cancel {},
+  Cancel { reason: String },
   Claim {},
 }
 

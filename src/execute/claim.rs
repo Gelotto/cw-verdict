@@ -2,7 +2,7 @@ use crate::{
   error::ContractError,
   models::Token,
   state::{HAS_CLAIMED, TRIAL, VOTERS_TOTAL_CLAIM_AMOUNT, VOTES},
-  util::{build_cw20_transfer_msg, build_native_send_msg, respond_cw20, respond_native},
+  util::{build_cw20_transfer_msg, build_native_send_msg},
 };
 use cosmwasm_std::{attr, DepsMut, Env, MessageInfo, Response, Uint128};
 
@@ -45,7 +45,6 @@ pub fn claim(
         Token::Cw20 {
           address: cw20_token_address,
         } => response.add_submessage(build_cw20_transfer_msg(
-          &deps,
           &env.contract.address,
           &info.sender,
           &cw20_token_address,
@@ -94,7 +93,6 @@ pub fn claim(
             Token::Cw20 {
               address: cw20_token_address,
             } => response.add_submessage(build_cw20_transfer_msg(
-              &deps,
               &env.contract.address,
               &info.sender,
               &cw20_token_address,

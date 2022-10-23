@@ -84,7 +84,6 @@ pub fn decide(
               let amount = Uint128::from(juror.pct) * total / Uint128::from(100u128);
               jurors_total_claim_amount += amount;
               cw20_jury_transfer_submsgs.push(build_cw20_transfer_msg(
-                &deps,
                 &env.contract.address,
                 &juror.address,
                 &address,
