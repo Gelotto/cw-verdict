@@ -1,3 +1,3 @@
-mod get_something;
+mod get_trial;
 
-pub use get_something::get_trial;
+pub use get_trial::get_trial;
