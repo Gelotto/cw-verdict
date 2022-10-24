@@ -14,8 +14,7 @@ consensus.
 ### Vote
 
 Players can cast votes as long as a trial is `active`. Each vote carries a
-_weight_. The cost of a vote is equal to the weight, multiplied by a unit price,
-\*set in `Verdict::price`. A player can cast votes
+_weight_. The cost of a vote is equal to the weight, multiplied by a unit price. A player can cast votes
 multiple times, either for the same or different choice. For example, they can
 place a weight of 5 on choice "A" and a weight of 1 on choice "B".
 
