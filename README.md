@@ -26,10 +26,8 @@ place a weight of 5 on choice "A" and a weight of 1 on choice "B".
 ### Decide
 
 Only members of the jury can execute the `decide` method. Here, they upload the
-output of the trial's off-chain decision script. The final "juror" to execute
-this method puts the contract into the `has_verdict` state in which. Once a
-defined timeout period comes to an end following this point, winners can claim
-rewards. However, if a member of the jury submits output that differs from other
+output of the trial's off-chain decision script. The final juror to execute
+this method puts the contract into the `has_verdict` state. After a defined timeout, during which any possible disputes may be resolved, winners can claim their rewards. However, if a member of the jury submits a result that differs from other
 members, the contract goes into a `hung_jury` state, and each wallet may then
 call the `claim` method to receive a complete refund.
 
