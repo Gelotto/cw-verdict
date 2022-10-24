@@ -1,30 +1,7 @@
-use cosmwasm_std::{
-  attr, to_binary, Addr, BankMsg, Coin, CosmosMsg, DepsMut, MessageInfo, Response, SubMsg, Uint128,
-  WasmMsg,
-};
+use cosmwasm_std::{to_binary, Addr, BankMsg, Coin, CosmosMsg, DepsMut, SubMsg, Uint128, WasmMsg};
 use cw20::{Cw20ExecuteMsg, Cw20QueryMsg};
 
 use crate::error::ContractError;
-
-/// Return a Response that performs a CW20 token transfer to the contract.
-/// Validates the payment amount sent in the tx, assuming the contract has been
-/// granted the necessary allowance already.
-pub fn respond_cw20(
-  deps: &DepsMut,
-  info: &MessageInfo,
-  contract_addr: &Addr,
-  cw20_token_address: &Addr,
-  amount: Uint128,
-  action: &str,
-) -> Result<Response, ContractError> {
-  validate_cw20_funds(&deps, &info.sender, amount, &cw20_token_address)?;
-  let submsg = build_cw20_transfer_msg(&info.sender, contract_addr, cw20_token_address, amount)?;
-  Ok(
-    Response::new()
-      .add_submessage(submsg)
-      .add_attributes(vec![attr("action", action.to_owned())]),
-  )
-}
 
 pub fn build_cw20_transfer_msg(
   from_address: &Addr,
@@ -47,24 +24,6 @@ pub fn build_cw20_transfer_msg(
 
 /// Return a Response that performs a bank transfer of native funds to the
 /// contract. Validates the payment amount sent in the tx.
-pub fn respond_native(
-  info: &MessageInfo,
-  contract_addr: &Addr,
-  ibc_denom: &String,
-  amount: Uint128,
-  action: &str,
-) -> Result<Response, ContractError> {
-  // Perform transfer of IBC asset from sender to contract.
-  validate_native_funds(&info.funds, amount, ibc_denom)?;
-  let send_payment_message = build_native_send_msg(contract_addr, ibc_denom, amount)?;
-  Ok(
-    Response::new()
-      .add_message(send_payment_message)
-      .add_attributes(vec![attr("action", action.to_owned())]),
-  )
-}
-/// Return a Response that performs a bank transfer of native funds to the
-/// contract. Validates the payment amount sent in the tx.
 pub fn build_native_send_msg(
   to_address: &Addr,
   ibc_denom: &String,
@@ -78,7 +37,7 @@ pub fn build_native_send_msg(
 }
 
 // Check for the payment amount required by querying the CW20 token contract.
-fn validate_cw20_funds(
+pub fn validate_cw20_funds(
   deps: &DepsMut,
   wallet: &Addr,
   payment_amount: Uint128,
@@ -97,7 +56,7 @@ fn validate_cw20_funds(
 }
 
 // Check for the exact payment amount required in the tx's funds.
-fn validate_native_funds(
+pub fn validate_native_funds(
   funds: &Vec<Coin>,
   payment_amount: Uint128,
   denom: &String,

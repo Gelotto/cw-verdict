@@ -2,9 +2,11 @@ use crate::{
   error::ContractError,
   models::{Token, Vote},
   state::{TRIAL, VOTES},
-  util::{respond_cw20, respond_native},
+  util::{
+    build_cw20_transfer_msg, build_native_send_msg, validate_cw20_funds, validate_native_funds,
+  },
 };
-use cosmwasm_std::{DepsMut, Env, MessageInfo, Response, Uint128};
+use cosmwasm_std::{attr, DepsMut, Env, MessageInfo, Response, Uint128};
 
 /// Cast a vote on an active trial. The funding required is proportional to the
 /// weight of the vote.
@@ -62,15 +64,27 @@ pub fn vote(
   // return a respnse with the necessary transfer msg/submsg
   Ok(match trial.token.clone() {
     Token::Native { denom } => {
-      respond_native(&info, &env.contract.address, &denom, payment, "vote")?
+      validate_native_funds(&info.funds, payment, &denom)?;
+      Response::new()
+        .add_message(build_native_send_msg(
+          &env.contract.address,
+          &denom,
+          payment,
+        )?)
+        .add_attributes(vec![attr("action", "vote")])
     },
-    Token::Cw20 { address } => respond_cw20(
-      &deps,
-      &info,
-      &env.contract.address,
-      &address,
-      payment,
-      "vote",
-    )?,
+    Token::Cw20 {
+      address: cw20_token_address,
+    } => {
+      validate_cw20_funds(&deps, &info.sender, payment, &cw20_token_address)?;
+      Response::new()
+        .add_submessage(build_cw20_transfer_msg(
+          &info.sender,
+          &env.contract.address,
+          &cw20_token_address,
+          payment,
+        )?)
+        .add_attributes(vec![attr("action", "vote")])
+    },
   })
 }
