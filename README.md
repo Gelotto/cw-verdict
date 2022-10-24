@@ -2,8 +2,8 @@
 
 Verdict is a game where players vote on one or more possible outcomes of a
 future event. Once the event has happened, a group of players, known as jurors,
-try to form consensus on the true outcome by running a code snippet
-stored in the smart contract off-chain and sending the result back to the
+try to form consensus on the true outcome by running (off-chain) a code snippet
+stored in the smart contract and sending the result back to the
 contract. If all members of the jury agree, then players with votes on the
 winning side split the funds stored in the contract, proportional to the
 purchased weight of each of their votes. In addition, each jury charges a
